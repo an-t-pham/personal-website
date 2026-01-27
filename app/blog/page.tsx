@@ -23,8 +23,7 @@ export default function BlogPage() {
             Blog
           </h2>
           <p className="mt-4 text-zinc-400">
-            Thoughts, notes, and updates. Add your own posts in{" "}
-            <code className="text-zinc-500">content/blog/</code>.
+            Thoughts, notes, and updates.
           </p>
         </div>
         <div className="w-full h-px bg-zinc-800" />
