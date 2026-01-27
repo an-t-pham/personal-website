@@ -14,7 +14,19 @@ type Props = {
   };
 };
 
-const redis = Redis.fromEnv();
+// Initialize Redis only if env vars are available
+let redis: ReturnType<typeof Redis.fromEnv> | null = null;
+try {
+  if (
+    process.env.UPSTASH_REDIS_REST_URL &&
+    process.env.UPSTASH_REDIS_REST_TOKEN
+  ) {
+    redis = Redis.fromEnv();
+  }
+} catch (error) {
+  // Redis not configured, will default to 0 views
+  console.warn("Redis not configured, view counts will default to 0");
+}
 
 export async function generateStaticParams(): Promise<Props["params"][]> {
   return allProjects
@@ -32,8 +44,18 @@ export default async function PostPage({ params }: Props) {
     notFound();
   }
 
-  const views =
-    (await redis.get<number>(["pageviews", "projects", slug].join(":"))) ?? 0;
+  let views = 0;
+  if (redis) {
+    try {
+      views =
+        (await redis.get<number>(["pageviews", "projects", slug].join(":"))) ??
+        0;
+    } catch (error) {
+      // Redis connection failed (e.g., during build or missing env vars)
+      // Default to 0 views
+      console.warn(`Failed to fetch views for ${slug}:`, error);
+    }
+  }
 
   return (
     <div className="bg-zinc-50 min-h-screen">
