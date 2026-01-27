@@ -9,7 +9,7 @@ const timeline = [
     date: "2020",
     title: "Started coding",
     description:
-      "Picked up programming during the lockdown out of curiosity—the start of a long-term commitment to tech.",
+      "Picked up programming during the lockdown out of curiosity which has become the start of a long-term commitment to tech.",
   },
   {
     date: "2022",
@@ -36,7 +36,7 @@ export default function About() {
           </h2>
           <div className="container flex items-center justify-center min-h-[60vh] px-4 mx-auto">
             <p className="mt-4 mr-8 text-zinc-400">
-              I am a passionate developer with a strong interest in building
+              Hi, I'm An - a passionate developer with a strong interest in building
               thoughtful, problem-driven solutions through technology. What
               began as a curiosity during the lockdown evolved into a long-term
               commitment to learning, growth, and creativity in tech. I enjoy
