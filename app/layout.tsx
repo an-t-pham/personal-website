@@ -6,23 +6,15 @@ import { Analytics } from "./components/analytics";
 
 export const metadata: Metadata = {
   title: {
-    default: "chronark.com",
-    template: "%s | chronark.com",
+    default: "An Pham",
+    template: "%s | An Pham",
   },
-  description: "Co-founder of unkey.dev and founder of planetfall.io",
+  description:
+    "Full-stack engineer working in the fintech space in London. TypeScript, React, Node.js, Scala, Ruby.",
   openGraph: {
-    title: "chronark.com",
+    title: "An Pham",
     description:
-      "Co-founder of unkey.dev and founder of planetfall.io",
-    url: "https://chronark.com",
-    siteName: "chronark.com",
-    images: [
-      {
-        url: "https://chronark.com/og.png",
-        width: 1920,
-        height: 1080,
-      },
-    ],
+      "Full-stack engineer working in the fintech space in London. TypeScript, React, Node.js, Scala, Ruby.",
     locale: "en-US",
     type: "website",
   },
@@ -38,7 +30,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: "Chronark",
+    title: "An Pham",
     card: "summary_large_image",
   },
   icons: {
