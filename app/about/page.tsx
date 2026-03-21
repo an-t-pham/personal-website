@@ -1,27 +1,29 @@
 "use client";
 
 import { Navigation } from "../components/nav";
+import { Card } from "../components/card";
 import Image from "next/image";
-import HelloWorld from "../../public/about-me.png";
+import HelloWorld from "../../public/about-me-yuki.png";
 
 const timeline = [
   {
     date: "2020",
-    title: "Started coding",
+    title: "Career Transition into Tech",
     description:
-      "Picked up programming during the lockdown out of curiosity which has become the start of a long-term commitment to tech.",
+      "With a background in marketing and a passion for innovation, I transitioned from creating engaging experiences for an independent chocolate brand to building digital products. During the pandemic, I embraced the shift by completing a software engineering bootcamp at Flatiron School, laying the foundation for my career in tech.",
   },
   {
-    date: "2022",
-    title: "Building in public",
+    date: "2021-2023",
+    title: "Full-Stack Software Engineer, Profile Pensions",
     description:
-      "Started shipping projects and turning ideas into practical applications.",
+      "Worked across the stack in a Node.js microservices environment, building scalable features for a digital pension platform. Developed event-driven systems using RabbitMQ, including automated customer messaging and internal workflow tools that improved transfer conversion rates and operational efficiency. Also contributed to secure client–operations communication and supported production systems.",
   },
   {
-    date: "Present",
-    title: "Here now",
+    date: "2024 – Present",
+    title: "Backend Software Engineer, Moneyfarm",
     description:
-      "Focusing on thoughtful, problem-driven solutions and continuous learning in an ever-evolving digital landscape.",
+      "Following the acquisition of Profile Pensions, focused on backend development within a microservices and event-driven architecture using TypeScript, Scala and Kafka. Contributed to a large-scale migration from legacy systems to a new ecosystem, building backend scripts, supporting data transformation, and ensuring a smooth customer transition.\
+      Continuing to deliver reliable, scalable systems with a focus on onboarding and platform stability.",
   },
 ];
 
@@ -30,25 +32,47 @@ export default function About() {
     <div className="relative pb-16">
       <Navigation />
       <div className="px-6 pt-20 mx-auto space-y-8 max-w-7xl lg:px-8 md:space-y-16 md:pt-24 lg:pt-32">
-        <div className="max-w-2xl mx-auto lg:mx-0 px-4">
+        <div className="max-w-4xl mx-auto lg:mx-0 px-4">
           <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">
             About me
           </h2>
-          <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-center md:gap-8">
-            <p className="flex-1 text-zinc-400 md:min-w-0">
-              Hi, I'm An - a passionate developer with a strong interest in building
-              thoughtful, problem-driven solutions through technology. What
-              began as a curiosity during the lockdown evolved into a long-term
-              commitment to learning, growth, and creativity in tech. I enjoy
-              turning ideas into practical applications and continuously
-              developing my skills in an ever-evolving digital landscape.
-            </p>
-            <Image
-              src={HelloWorld}
-              alt="An pic"
-              width={400}
-              className="w-full shrink-0 md:w-[min(400px,40%)]"
-            />
+          <p className="mt-4 text-zinc-400 text-sm sm:text-base">
+          </p>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* Card - left (matches contact section, same size as photo) */}
+            <div className="order-2 md:order-1 aspect-[3/4] min-h-[280px]">
+              <Card className="h-full">
+                <div className="h-full p-6 md:p-8 flex flex-col justify-start">
+                  <div className="mt-6 space-y-4 text-zinc-400 text-sm leading-relaxed">
+                  <p>
+                    Hi, my name is An Pham. I'm a passionate developer with a strong interest
+                    in building thoughtful, problem-driven solutions through
+                    technology.
+                  </p>
+                  <p>
+                    What began as a curiosity during the lockdown evolved into a
+                    long-term commitment to learning, growth, and creativity in
+                    tech. I enjoy turning ideas into practical applications and
+                    continuously developing my skills in an ever-evolving
+                    digital landscape.
+                  </p>
+                  <p>
+                    When I'm not debugging my life choices, I'm probably
+                    watching a movie, building a model or dragging my dog on a hike he didn't ask for.
+                  </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+            {/* Photo - right (same size as card) */}
+            <div className="relative aspect-[3/4] min-h-[280px] order-1 md:order-2">
+              <Image
+                src={HelloWorld}
+                alt="An pic"
+                fill
+                className="object-cover object-top rounded-lg"
+              />
+            </div>
           </div>
         </div>
 
