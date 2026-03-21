@@ -39,11 +39,11 @@ export default function About() {
           <p className="mt-4 text-zinc-400 text-sm sm:text-base">
           </p>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {/* Card - left (matches contact section, same size as photo) */}
-            <div className="order-2 md:order-1 aspect-[3/4] min-h-[280px]">
-              <Card className="h-full">
-                <div className="h-full p-6 md:p-8 flex flex-col justify-start">
-                  <div className="mt-6 space-y-4 text-zinc-400 text-sm leading-relaxed">
+            {/* Card - left (matches contact section, same size as photo on desktop) */}
+            <div className="order-2 md:order-1 md:aspect-[3/4] md:min-h-[280px] min-h-0">
+              <Card className="h-full min-h-0 overflow-hidden">
+                <div className="h-full p-4 sm:p-6 md:p-8 flex flex-col justify-start overflow-auto min-w-0">
+                  <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 text-zinc-400 text-sm sm:text-base leading-relaxed break-words">
                   <p>
                     Hi, my name is An Pham. I'm a passionate developer with a strong interest
                     in building thoughtful, problem-driven solutions through
@@ -64,8 +64,8 @@ export default function About() {
                 </div>
               </Card>
             </div>
-            {/* Photo - right (same size as card) */}
-            <div className="relative aspect-[3/4] min-h-[280px] order-1 md:order-2">
+            {/* Photo - right (same size as card on desktop) */}
+            <div className="relative aspect-[3/4] min-h-[280px] order-1 md:order-2 w-full">
               <Image
                 src={HelloWorld}
                 alt="An pic"
