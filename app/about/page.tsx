@@ -3,7 +3,7 @@
 import { Navigation } from "../components/nav";
 import { Card } from "../components/card";
 import Image from "next/image";
-import HelloWorld from "../../public/about-me-yuki.png";
+import aboutMeImage from "../../public/about-me-yuki.jpg";
 
 const timeline = [
   {
@@ -67,9 +67,11 @@ export default function About() {
             {/* Photo - right (same size as card on desktop) */}
             <div className="relative aspect-[3/4] min-h-[280px] order-1 md:order-2 w-full">
               <Image
-                src={HelloWorld}
-                alt="An pic"
+                src={aboutMeImage}
+                alt="An Pham"
                 fill
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover object-top rounded-lg"
               />
             </div>
