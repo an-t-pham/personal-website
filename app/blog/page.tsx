@@ -23,7 +23,7 @@ export default function BlogPage() {
             Blog
           </h2>
           <p className="mt-4 text-zinc-400">
-            Thoughts, notes, and updates.
+            Loose notes on tech, tools, and stuff. Coherence sold separately!
           </p>
         </div>
         <div className="w-full h-px bg-zinc-800" />

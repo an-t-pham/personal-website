@@ -1,0 +1,109 @@
+---
+title: "Public keys, private keys, and SSH into a server"
+description: "How asymmetric keys work, why SSH uses them, and the steps to connect to a remote machine safely."
+date: "2025-01-10"
+published: true
+---
+
+If you’ve ever seen `id_rsa.pub` or been told to “add your SSH key to GitHub,” you’re already touching the same idea that lets you log into a server without typing a password every time. Here’s a compact mental model and a practical path from zero to `ssh user@your-server`.
+
+## Two keys, one lock
+
+**Asymmetric cryptography** uses a matched pair:
+
+- **Private key** – Stays on *your* machine only. Never paste it into Slack, email, or a website. Anyone who has it can impersonate you.
+- **Public key** – Safe to share. It’s not a secret; it’s more like a padlock you give to a server.
+
+The math is one-way: data encrypted (or signed) with one key can only be verified or decrypted with the other. SSH doesn’t send your private key over the wire. Instead, the server proves it knows your public key, and you prove you hold the matching private key without ever exposing the private key itself.
+
+## How SSH uses them
+
+When you run `ssh user@server`:
+
+1. Your client offers keys it knows about (from `~/.ssh/`).
+2. The server checks whether your **public** key appears in the account’s `~/.ssh/authorized_keys` (on the server, for that user).
+3. If there’s a match, the two sides run a challenge–response that only succeeds if your **private** key is present and correct.
+
+Password login can still be enabled on the server, but key-based auth is standard for automation and daily use because it’s strong and convenient when set up right.
+
+## 1. Generate a key pair (on your laptop)
+
+Modern default is **Ed25519** (short keys, widely supported):
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/id_ed25519
+```
+
+You’ll be asked for a **passphrase**. Using one is recommended: if someone copies your private key file, they still need the passphrase to use it.
+
+If you must use RSA (older systems):
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f ~/.ssh/id_rsa
+```
+
+This creates:
+
+- **Private key:** `~/.ssh/id_ed25519` (or `id_rsa`) - keep it secret.
+- **Public key:** `~/.ssh/id_ed25519.pub` - this is what you install on the server.
+
+## 2. Put your public key on the server
+
+You need **one line** from the `.pub` file on the server, in `~/.ssh/authorized_keys` for the user you’ll log in as (e.g. `ubuntu`, `root`, `deploy`).
+
+**Option A – `ssh-copy-id` (easiest if password SSH still works)**
+
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@server-ip-or-hostname
+```
+
+**Option B – manual**
+
+1. Show your public key: `cat ~/.ssh/id_ed25519.pub`
+2. On the server (via console, password SSH, or a host panel), append that **single line** to `~/.ssh/authorized_keys`.
+3. Ensure permissions (on the server):
+
+```bash
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+```
+
+Wrong permissions often cause SSH to silently ignore your key.
+
+## 3. Connect
+
+```bash
+ssh -i ~/.ssh/id_ed25519 user@server-ip-or-hostname
+```
+
+If you use the default path and name, you can omit `-i`:
+
+```bash
+ssh user@server-ip-or-hostname
+```
+
+## 4. Optional: `~/.ssh/config`
+
+Avoid typing user, host, and key path every time:
+
+```text
+Host myserver
+  HostName 203.0.113.10
+  User deploy
+  IdentityFile ~/.ssh/id_ed25519
+```
+
+Then:
+
+```bash
+ssh myserver
+```
+
+## Security habits worth keeping
+
+- **Never commit or share the private key** (no `.pem` or `id_*` without `.pub` in git).
+- **Rotate keys** if you suspect exposure; remove old public keys from `authorized_keys`.
+- On the server, **disable password authentication** and root password login once keys work only after you’ve confirmed key access and have another way in (e.g. cloud console).
+- Use a **passphrase** on the private key, and use `ssh-agent` so you don’t type it on every connection.
+
+Public and private keys are the foundation for SSH, Git over SSH, and many deployment pipelines. Once your public key is in `authorized_keys` and your permissions are correct, access feels like “it just works” because the crypto is doing the heavy lifting in the background.

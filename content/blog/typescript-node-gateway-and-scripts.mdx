@@ -1,0 +1,61 @@
+---
+title: "TypeScript and Node as a gateway and as your everyday scripting layer"
+description: "Why a Node/TypeScript tier can sit cleanly in front of systems built in Scala (or any other stack), and why the same runtime is a strong choice for glue code and internal scripts."
+date: "2025-02-15"
+published: true
+---
+
+Most serious backends are not “one language end to end.” At my company the core platform is **Scala** - strong types, the JVM ecosystem, great fit for long-running services and heavy domain logic. That does not mean every new surface has to be Scala too. **TypeScript on Node** is often the right tool when you need a **thin, fast-moving layer** in front of an established system, or when you need **scripts** that humans actually maintain.
+
+This post is about that split: when Node/TS shines as a **gateway**, and when it shines as **scripting glue** without pretending it replaces your primary stack.
+
+## The gateway idea
+
+A **gateway** (or BFF backend for frontend) sits between clients and your internal services. It might:
+
+- Expose **HTTP/JSON** (or GraphQL) shaped for web and mobile apps
+- Handle **auth translation**, rate limits, and caching at the edge of your system
+- **Aggregate** several backend calls into one response so the UI stays simple
+- Own **webhooks**, file uploads, or streaming quirks that are awkward deep inside a JVM service
+
+Your Scala services stay the **source of truth** for business rules, data consistency, and throughput-sensitive paths. The Node layer speaks **their language over the wire**: REST, gRPC, Kafka consumers, message queues or whatever you already standardized.
+
+That separation is powerful: you can evolve public APIs and client contracts without rewriting the core. Teams that ship frontends often already think in **TypeScript**; putting a typed Node service in the middle reduces friction and shared types (e.g. OpenAPI-generated clients, or hand-maintained DTOs) across the boundary.
+
+## Why TypeScript fits the boundary
+
+- **Types at the integration edge** – You’re marshalling JSON, validating payloads, and matching external schemas. TypeScript catches a lot of “wrong shape” bugs before they hit production, similar in spirit to what you value in Scala, but with a syntax and tooling loop that matches JS-heavy clients.
+- **Ecosystem** – Mature HTTP servers, middleware, observability hooks, and client libraries are everywhere. For “talk to five services and combine results,” npm is hard to beat.
+- **Velocity** – Small services and experiments deploy quickly. Not every change deserves a full Scala release train when the behavior is mostly orchestration.
+- **Same language as the frontend** – Shared validation (e.g. Zod), duplicated types reduced, easier onboarding for full-stack engineers.
+
+None of that argues for rewriting Scala core logic in Node. It argues for **using the right thickness of TypeScript** where **protocol and presentation** matter most.
+
+## Scala stays central; Node does not have to “own” the domain
+
+A healthy pattern: **Scala** implements invariants, transactions, and domain models. **Node** implements **orchestration, adaptation, and client-specific views**. If business logic creeps into the gateway, you’ll feel it - duplicate rules, drift, hard-to-test bundles. Keeping the gateway **thin** preserves clarity: one place for “what is true,” another for “how we expose it.”
+
+When you need heavy computation or strict lifecycle guarantees, push work back to the JVM (or call it asynchronously and design for failure). The gateway is powerful when it is **honest about what it is**.
+
+## Node and TypeScript for scripts, not only for servers
+
+The same runtime is underrated for **internal tooling**:
+
+- **One-off migrations** and data fixes (with dry-run flags and logging)
+- **CI glue**: calling APIs, parsing artifacts, failing the build with clear messages
+- **Developer CLIs** that wrap your staging APIs or Kafka topics
+- **Cron-friendly jobs** that are too small for a full service but too fiddly for bash alone
+
+TypeScript gives you **structure** (modules, types, tests) without the ceremony of a large Scala project for a 200-line utility. `tsx` or a small compiled script can run anywhere Node runs. For teams that already use TS on the frontend or in the gateway, **one language for “small executable things”** lowers the bar to automation.
+
+## Tradeoffs to keep in mind
+
+- **Operational surface** – Another runtime to patch, monitor, and secure. Worth it when the gateway or scripts are real products, not forgotten folders.
+- **Consistency** – Document how errors, IDs, and auth propagate from Scala → Node → clients so behavior stays predictable.
+- **Testing** – Contract tests against your backend (or consumer-driven contracts) help when both sides evolve.
+
+## Takeaway
+
+**Scala** (or any mature backend language) can remain the backbone of your system. **TypeScript on Node** can be a **practical gateway**: fast to change, typed at the seams, friendly to web-shaped workloads. The same stack doubles as a **serious scripting environment** typed, testable glue that teams will actually maintain.
+
+You are not choosing one language over the other; you are **placing each where it wins**.
