@@ -1,0 +1,70 @@
+---
+title: "Beyond autocomplete: learning unfamiliar domains with agentic AI, then testing and shipping"
+description: "From line-level suggestions to agents that explore codebases: how to use AI to map unknown territory, run a planning session you still own, and close the loop with tests and deploys."
+date: "2025-03-01"
+published: true
+---
+
+GitHub Copilot and similar tools trained many of us to think of AI as **autocomplete with superpowers**: finish the line, suggest a function, draft a regex. That still matters. But the next shift is **agentic** workflows. Systems that can take broader goals, read across files, propose plans, run commands, and iterate. The risk is outsourcing judgment; the opportunity is using agents to **compress exploration** in domains you don’t yet understand, while **you** keep the goals, tradeoffs, and final say.
+
+Here’s a practical frame: use AI to **illuminate the unknown**, run a **planning session that includes your input**, then **test** and **deploy** like you would for any serious change.
+
+## From “next token” to “next step”
+
+Autocomplete is local: the model sees nearby context and continues. Agentic setups are **goal-oriented**: you describe an outcome (“refactor this module,” “add OAuth,” “why does this job fail in prod?”), and the system can search, summarize, propose steps, and sometimes execute them.
+
+That difference matters when you’re **new to a codebase, a stack, or a business domain**. You don’t need the model to write perfect code on the first try; you need it to **build a map**: what files matter, what invariants exist, what could break.
+
+## Using AI to understand what you don’t know yet
+
+When the domain is unknown, start with **questions, not prompts**:
+
+- “What are the main entry points for feature X?”
+- “What assumptions does this service make about data shape and failure modes?”
+- “List the top five risks if we change this dependency.”
+
+Ask for **structured output**: bullet lists, numbered plans, explicit “open questions.” Treat the reply as a **first draft of a research note**, not authority. Then **verify**: open the files it cited, run the app, read one level deeper than the summary.
+
+Agents shine when they can **traverse** a repo (finding callers, configs, and tests) faster than you could on day one. Your job is to **catch hallucinated paths** and **add constraints** the model can’t infer (“we must stay on Node 18,” “no new paid APIs,” “release is Thursday”).
+
+## A planning session still needs *your* input
+
+A good planning session with AI looks like **dialogue**, not a single mega-prompt:
+
+1. **Goal** – You state the outcome and non-negotiables (latency, security, scope).
+2. **Exploration** – The agent (or you with tool-assisted search) maps the terrain.
+3. **Options** – You ask for 2–3 approaches with tradeoffs, not one “best” answer.
+4. **Decision** – **You** pick the approach; the model refines the plan to match.
+5. **Checklist** – Turn the plan into testable steps: migrations, flags, rollback.
+
+If you skip your own constraints, you get elegant plans that ignore reality. The effective pattern is **human-owned intent**, **AI-assisted discovery and drafting**.
+
+## Test: where trust becomes evidence
+
+Agents can suggest tests; **you** decide what “done” means. After a change:
+
+- Run **automated tests** and add the smallest test that would have caught a real mistake.
+- For risky paths, prefer **characterization tests** or **integration checks** over only trusting the happy path.
+- When the domain is fuzzy, ask the model: “What scenarios did we not cover?” then treat the answer as a **test backlog**, not gospel.
+
+Testing is the bridge between “sounds right” and “we know what we broke.”
+
+## Deploy: same discipline, faster loops
+
+Deployment doesn’t change because AI wrote part of the diff. You still want:
+
+- **Small, reviewable changes** when possible.
+- **Staging or preview environments** for anything user-facing.
+- **Monitoring and rollback** assumptions stated explicitly in the plan.
+
+Agentic tooling can help draft runbooks or migration steps; **you** align them with how your team actually ships.
+
+## A compact workflow
+
+1. **Learn** – Use AI to summarize and navigate the unknown; verify against the repo and docs.  
+2. **Plan** – Co-author a short plan with options; you choose tradeoffs.  
+3. **Implement** – Use autocomplete or agents for speed; keep diffs reviewable.  
+4. **Test** – Prove behavior; extend coverage where risk is high.  
+5. **Deploy** – Ship with the same gates you’d use without AI.
+
+Moving beyond autocomplete isn’t about letting software **replace** your judgment. It’s about letting it **accelerate** the loop from “I don’t understand this yet” to “I have a tested change in production.” The center of gravity stays **you**: goals, constraints, and the decision to ship.
